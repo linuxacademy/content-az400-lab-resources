@@ -107,16 +107,16 @@
       "properties": {
         "securityRules": [
           {
-            "name": "SSH",
+            "name": "http",
             "properties": {
-              "priority": 1000,
+              "priority": 100,
               "protocol": "TCP",
               "access": "Allow",
               "direction": "Inbound",
               "sourcevnetPrefix": "*",
               "sourcePortRange": "*",
               "destinationvnetPrefix": "*",
-              "destinationPortRange": "22"
+              "destinationPortRange": "80"
             }
           }
         ]
