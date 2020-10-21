@@ -7,7 +7,7 @@
     "virtualNetworkName": "dscVNET",
     "location": "[resourceGroup().location]",
     "_artifactsLocationSasToken": "",
-    "_artifactsLocation": "https://raw.githubusercontent.com/chadmcrowell/dsc/main/",
+    "_artifactsLocation": "https://raw.githubusercontent.com/linuxacademy/content-az400-lab-resources/DSC/",
     "configurationFunction": "ContosoWebsite.ps1\\ContosoWebsite",
     "moduleFilePath": "ContosoWebsite.ps1.zip",
     "imageSKU": "2019-Datacenter",
