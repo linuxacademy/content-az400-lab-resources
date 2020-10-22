@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/resources/templates/templateShopping.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="itemId" value="#{catalogBean.itemId}" required="true"/>
+        <f:viewAction action="#{catalogBean.doFindItem}"/>
+    </f:metadata>
+
+    <ui:param name="pageTitle" value="#{catalogBean.item.product.name} - #{catalogBean.item.name}"/>
+
+    <ui:define name="header">
+        #{catalogBean.item.product.name} - #{catalogBean.item.name}
+    </ui:define>
+
+    <ui:define name="subheader">
+        <h:outputText value="#{i18n.noItemsFound}" rendered="#{catalogBean.item == null}"/>
+    </ui:define>
+
+    <ui:define name="main">
+
+        <h:form>
+            <h:panelGrid columns="3" rendered="#{catalogBean.item != null}" styleClass="table">
+                <h:column>
+                    <h:graphicImage url="/resources/images/#{catalogBean.item.imagePath}"
+                                    alt="#{catalogBean.item.name}"/>
+                </h:column>
+
+                <h:column>
+                    <h:outputText value="#{i18n.item_unitCost}:"/>
+                    <h:outputText value="#{catalogBean.item.unitCost}"/> $
+                </h:column>
+
+                <h:column>
+                    <h:commandLink action="#{shoppingCartBean.addItemToCart}" styleClass="add-to-cart"
+                                   rendered="#{accountBean.loggedIn}">
+                        <h:outputText value="#{i18n.searchResult_addToCart}"/>
+                        <f:param name="itemId" value="#{catalogBean.item.id}"/>
+                    </h:commandLink>
+                </h:column>
+            </h:panelGrid>
+
+            <h:panelGrid columns="1" rendered="#{catalogBean.item != null}">
+                <h:column>
+                    <h:outputText value="#{catalogBean.item.description}"/>
+                </h:column>
+            </h:panelGrid>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

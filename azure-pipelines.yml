@@ -1,0 +1,57 @@
+# Maven
+# Build your Java projects and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+stages:
+- stage: Build 
+  jobs:
+    - job: MavenBuild
+      steps:
+      - task: Maven@3
+        displayName: 'Maven Compile'
+        inputs:
+          goals: compile
+          options: '-Dmaven.test.skip=true'
+          publishJUnitResults: false
+
+      - task: Maven@3
+        displayName: 'Maven Build'
+        inputs:
+          mavenPomFile: pom.xml
+          options: '-Dmaven.test.skip=true'
+          publishJUnitResults: false
+      
+      - task: CopyFiles@2
+        displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+        inputs:
+          SourceFolder: '$(system.defaultworkingdirectory)'
+          Contents: '**/*.war'
+          TargetFolder: '$(build.artifactstagingdirectory)'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifacts: drop'
+        inputs:
+          PathtoPublish: '$(build.artifactstagingdirectory)'
+
+- stage: Deploy
+  dependsOn: Build 
+  jobs:
+  - deployment: Deployjob
+    displayName: Deploy job
+    environment: 'PetStore'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Build Artifacts'
+            inputs:
+              artifactName: drop
+          - task: AzureWebApp@1
+            displayName: 'Azure Web App Deploy: LinuxWildflyApp'
+            inputs:
+              azureSubscription: 'RMPM (afc11291-9826-46be-b852-70349146ddf8)'
+              appType: webAppLinux
+              appName: LinuxWildflyApp
+              package: '$(build.artifactstagingdirectory)/**/*.war'

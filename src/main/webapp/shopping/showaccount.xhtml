@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/resources/templates/templateShopping.xhtml">
+
+    <ui:param name="pageTitle" value="#{i18n.accounts}"/>
+
+    <ui:define name="header">
+        #{i18n.accounts}
+    </ui:define>
+
+    <ui:define name="main">
+
+        <h:form>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">#{i18n.confirmorder_personalInformation}</h3>
+                </div>
+                <div class="panel-body">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="#{i18n.customer_login}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.login}" class="form-control"
+                                     pt:disabled="disabled" size="30"/>
+
+                        <h:outputText value="#{i18n.customer_firstName}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.firstName}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                        <h:outputText value="#{i18n.customer_lastName}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.lastName}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                        <h:outputText value="#{i18n.customer_email}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.email}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                        <h:outputText value="#{i18n.customer_telephone}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.telephone}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                        <h:outputText value="#{i18n.customer_dateOfBirth}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.dateOfBirth}" class="form-control"
+                                      pt:disabled="disabled">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:inputText>
+
+                        <h:outputText value="#{i18n.customer_age}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.age}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                    </h:panelGrid>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">#{i18n.address}</h3>
+                </div>
+                <div class="panel-body">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="#{i18n.address_street1}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.street1}" class="form-control"
+                                      pt:disabled="disabled" size="36"/>
+
+                        <h:outputText value="#{i18n.address_street2}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.street2}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                        <h:outputText value="#{i18n.address_city}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.city}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                        <h:outputText value="#{i18n.address_state}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.state}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                        <h:outputText value="#{i18n.address_zipcode}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.zipcode}" class="form-control"
+                                      pt:disabled="disabled"/>
+
+                        <h:outputText value="#{i18n.address_country}:"/>
+                        <h:inputText value="#{accountBean.loggedinCustomer.homeAddress.country.printableName}" class="form-control"
+                                      pt:disabled="disabled"/>
+                    </h:panelGrid>
+                </div>
+            </div>
+
+            <div>
+                <h:commandLink action="/shopping/updateaccount" class="btn btn-primary">
+                    <h:outputText value="#{i18n.showAccount_edit}"/>
+                </h:commandLink>
+            </div>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+

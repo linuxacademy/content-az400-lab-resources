@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/resources/templates/templateShopping.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="productId" value="#{catalogBean.productId}" required="true"/>
+        <f:viewAction action="#{catalogBean.doFindItems}"/>
+    </f:metadata>
+
+    <ui:param name="pageTitle" value="#{i18n.showItems_itemForProduct} : #{catalogBean.product.name}"/>
+
+    <ui:define name="header">
+        #{i18n.showItems_itemForProduct} : #{catalogBean.product.name}
+    </ui:define>
+
+    <ui:define name="main">
+
+        <h:outputText value="#{i18n.noItemsFound}"
+                      rendered="#{catalogBean.items == null || catalogBean.items.size() ==0}"/>
+
+        <h:dataTable value="#{catalogBean.items}" var="oneItem" rendered="#{catalogBean.items.size() > 0}"
+                     styleClass="table">
+            <h:column>
+                <h:graphicImage url="/resources/images/#{oneItem.imagePath}" alt="Item"/>
+            </h:column>
+
+            <h:column>
+                <h:link outcome="showitem" includeViewParams="true" value="#{oneItem.name}">
+                    <f:param name="itemId" value="#{oneItem.id}"/>
+                    <!--<f:param name="cid" value="#{javax.enterprise.context.conversation.id}"/>-->
+                </h:link>
+            </h:column>
+
+            <h:column>
+                <h:outputText value="#{oneItem.unitCost}"/> $
+            </h:column>
+
+        </h:dataTable>
+
+    </ui:define>
+</ui:composition>

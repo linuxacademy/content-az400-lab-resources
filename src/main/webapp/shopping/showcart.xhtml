@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/resources/templates/templateShopping.xhtml">
+
+    <ui:param name="pageTitle" value="#{i18n.shoppingCart}"/>
+
+    <ui:define name="header">
+        #{i18n.shoppingCart}
+    </ui:define>
+
+    <ui:define name="subheader">
+        <h:outputText value="#{i18n.shoppingCart_empty}" rendered="#{shoppingCartBean.shoppingCartIsEmpty()}"/>
+    </ui:define>
+
+    <ui:define name="main">
+
+        <h:form rendered="#{!shoppingCartBean.shoppingCartIsEmpty()}">
+            <h:dataTable value="#{shoppingCartBean.cartItems}" var="oneItem" styleClass="table">
+                <h:column>
+                    <h:outputText value="#{oneItem.item.product.name}"/>
+                    <br/>
+                    <h:commandLink action="#{catalogBean.doFindItem}">
+                        <h:outputText value="#{oneItem.item.name}"/>
+                        <f:param name="itemId" value="#{oneItem.item.id}"/>
+                    </h:commandLink>
+                </h:column>
+                <h:column>
+                    <h:commandLink action="#{shoppingCartBean.updateQuantity}" styleClass="arrow_refresh">
+                        <h:outputText value="#{i18n.update}"/>
+                        <f:param name="itemId" value="#{oneItem.item.id}"/>
+                    </h:commandLink>
+                </h:column>
+                <h:column>
+                    <h:inputText value="#{oneItem.quantity}"/>
+                </h:column>
+                <h:column>
+                    x
+                    <h:outputText value="#{oneItem.item.unitCost}"/> $
+                </h:column>
+                <h:column>
+                    = <h:outputText value="#{oneItem.subTotal}"/> $
+                </h:column>
+                <h:column>
+                    <h:commandLink action="#{shoppingCartBean.removeItemFromCart}" styleClass="remove-from-cart">
+                        <h:outputText value="#{i18n.remove}"/>
+                        <f:param name="itemId" value="#{oneItem.item.id}"/>
+                    </h:commandLink>
+                </h:column>
+            </h:dataTable>
+
+            <br/>
+
+            <div>
+                Total $
+                <h:outputText value="#{shoppingCartBean.total}"/>
+                <h:commandLink action="#{shoppingCartBean.checkout}" value="Check Out"
+                               styleClass="checkout-cart"/>
+            </div>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
+

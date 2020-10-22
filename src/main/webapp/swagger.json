@@ -1,0 +1,736 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "PetStore APIs exposed",
+    "version" : "1.0.0",
+    "title" : "Petstore APIs",
+    "contact" : {
+      "name" : "Antonio Goncalves",
+      "url" : "https://antoniogoncalves.org/",
+      "email" : "antonio.goncalves@gmail.com"
+    }
+  },
+  "host" : "localhost:8080",
+  "basePath" : "/applicationPetstore/rest",
+  "tags" : [ {
+    "name" : "Category"
+  }, {
+    "name" : "Country"
+  }, {
+    "name" : "Customer"
+  }, {
+    "name" : "Item"
+  }, {
+    "name" : "Product"
+  } ],
+  "schemes" : [ "http", "https" ],
+  "paths" : {
+    "/categories" : {
+      "get" : {
+        "tags" : [ "Category" ],
+        "summary" : "Lists all the categories",
+        "description" : "",
+        "operationId" : "listAll",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "start",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "max",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Category"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Category" ],
+        "summary" : "Creates a category",
+        "description" : "",
+        "operationId" : "create",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/categories/{id}" : {
+      "get" : {
+        "tags" : [ "Category" ],
+        "summary" : "Finds a category given an identifier",
+        "description" : "",
+        "operationId" : "findById",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Category" ],
+        "summary" : "Updates a category",
+        "description" : "",
+        "operationId" : "update",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Category" ],
+        "summary" : "Deletes a category by id",
+        "description" : "",
+        "operationId" : "deleteById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/countries" : {
+      "get" : {
+        "tags" : [ "Country" ],
+        "summary" : "Lists all the countries",
+        "description" : "",
+        "operationId" : "listAll",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "start",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "max",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Country"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Country" ],
+        "summary" : "Creates a country",
+        "description" : "",
+        "operationId" : "create",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/countries/{id}" : {
+      "get" : {
+        "tags" : [ "Country" ],
+        "summary" : "Retrieves a country by its id",
+        "description" : "",
+        "operationId" : "findById",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Country" ],
+        "summary" : "Updates a country",
+        "description" : "",
+        "operationId" : "update",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Country" ],
+        "summary" : "Deletes a country given an id",
+        "description" : "",
+        "operationId" : "deleteById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/customers" : {
+      "get" : {
+        "tags" : [ "Customer" ],
+        "summary" : "Lists all the customers",
+        "description" : "",
+        "operationId" : "listAll",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "start",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "max",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Customer"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Customer" ],
+        "summary" : "Creates a customer",
+        "description" : "",
+        "operationId" : "create",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/customers/{id}" : {
+      "get" : {
+        "tags" : [ "Customer" ],
+        "summary" : "Finds a customer by it identifier",
+        "description" : "",
+        "operationId" : "findById",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Customer" ],
+        "summary" : "Updates a customer",
+        "description" : "",
+        "operationId" : "update",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Customer" ],
+        "summary" : "Deletes a customer by id",
+        "description" : "",
+        "operationId" : "deleteById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/items" : {
+      "get" : {
+        "tags" : [ "Item" ],
+        "summary" : "Lists all items",
+        "description" : "",
+        "operationId" : "listAll",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "start",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "max",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Item"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Item" ],
+        "summary" : "Creates a new item",
+        "description" : "",
+        "operationId" : "create",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/items/{id}" : {
+      "get" : {
+        "tags" : [ "Item" ],
+        "summary" : "Finds an item by its id",
+        "description" : "",
+        "operationId" : "findById",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Item" ],
+        "summary" : "Updates an item",
+        "description" : "",
+        "operationId" : "update",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Item" ],
+        "summary" : "Deletes an item by its id",
+        "description" : "",
+        "operationId" : "deleteById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/products" : {
+      "get" : {
+        "tags" : [ "Product" ],
+        "summary" : "Lists all products",
+        "description" : "",
+        "operationId" : "listAll",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "start",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        }, {
+          "name" : "max",
+          "in" : "query",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Product"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Product" ],
+        "summary" : "Creates new product",
+        "description" : "",
+        "operationId" : "create",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    },
+    "/products/{id}" : {
+      "get" : {
+        "tags" : [ "Product" ],
+        "summary" : "Finds a product by id",
+        "description" : "",
+        "operationId" : "findById",
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Product" ],
+        "summary" : "Updates a product",
+        "description" : "",
+        "operationId" : "update",
+        "consumes" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Product" ],
+        "summary" : "Deletes a product by id",
+        "description" : "",
+        "operationId" : "deleteById",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "pattern" : "[0-9][0-9]*",
+          "format" : "int64"
+        } ],
+        "responses" : {
+          "default" : {
+            "description" : "successful operation"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Address" : {
+      "type" : "object",
+      "required" : [ "city", "street1", "zipcode" ],
+      "properties" : {
+        "street1" : {
+          "type" : "string",
+          "minLength" : 5,
+          "maxLength" : 50
+        },
+        "street2" : {
+          "type" : "string"
+        },
+        "city" : {
+          "type" : "string",
+          "minLength" : 2,
+          "maxLength" : 50
+        },
+        "state" : {
+          "type" : "string"
+        },
+        "zipcode" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 10
+        },
+        "country" : {
+          "$ref" : "#/definitions/Country"
+        }
+      }
+    },
+    "Category" : {
+      "type" : "object",
+      "required" : [ "description", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "version" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 30
+        },
+        "description" : {
+          "type" : "string",
+          "minLength" : 0,
+          "maxLength" : 3000
+        }
+      }
+    },
+    "Country" : {
+      "type" : "object",
+      "required" : [ "iso3", "isoCode", "name", "numcode", "printableName" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "version" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "isoCode" : {
+          "type" : "string",
+          "minLength" : 2,
+          "maxLength" : 2
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 2,
+          "maxLength" : 80
+        },
+        "printableName" : {
+          "type" : "string",
+          "minLength" : 2,
+          "maxLength" : 80
+        },
+        "iso3" : {
+          "type" : "string",
+          "minLength" : 3,
+          "maxLength" : 3
+        },
+        "numcode" : {
+          "type" : "string",
+          "minLength" : 3,
+          "maxLength" : 3
+        }
+      }
+    },
+    "Customer" : {
+      "type" : "object",
+      "required" : [ "firstName", "lastName", "password" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "version" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "firstName" : {
+          "type" : "string",
+          "minLength" : 2,
+          "maxLength" : 50
+        },
+        "lastName" : {
+          "type" : "string",
+          "minLength" : 2,
+          "maxLength" : 50
+        },
+        "telephone" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "login" : {
+          "type" : "string"
+        },
+        "password" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 256
+        },
+        "uuid" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 256
+        },
+        "role" : {
+          "type" : "string",
+          "enum" : [ "USER", "ADMIN" ]
+        },
+        "dateOfBirth" : {
+          "type" : "string",
+          "format" : "date-time"
+        },
+        "age" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "homeAddress" : {
+          "$ref" : "#/definitions/Address"
+        },
+        "fullName" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Item" : {
+      "type" : "object",
+      "required" : [ "description", "name", "unitCost" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "version" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 30
+        },
+        "description" : {
+          "type" : "string",
+          "minLength" : 0,
+          "maxLength" : 3000
+        },
+        "imagePath" : {
+          "type" : "string"
+        },
+        "unitCost" : {
+          "type" : "number",
+          "format" : "float"
+        },
+        "product" : {
+          "$ref" : "#/definitions/Product"
+        }
+      }
+    },
+    "Product" : {
+      "type" : "object",
+      "required" : [ "description", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64"
+        },
+        "version" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "name" : {
+          "type" : "string",
+          "minLength" : 1,
+          "maxLength" : 30
+        },
+        "description" : {
+          "type" : "string",
+          "minLength" : 0,
+          "maxLength" : 3000
+        },
+        "category" : {
+          "$ref" : "#/definitions/Category"
+        }
+      }
+    }
+  }
+}

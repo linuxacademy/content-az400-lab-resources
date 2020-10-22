@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:forgeview="http://jboss.org/forge/view"
+                template="/resources/templates/templateShopping.xhtml">
+
+    <ui:param name="pageTitle" value="#{i18n.orderConfirmed_yourOrderIsComplete}"/>
+
+    <ui:define name="header">
+        #{i18n.orderConfirmed_yourOrderIsComplete}
+    </ui:define>
+
+    <ui:define name="main">
+
+        <h:form>
+
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">#{i18n.confirmorder_personalInformation}</h3>
+            </div>
+            <div class="panel-body">
+                <h:panelGrid columns="3">
+                    <h:outputText value="#{i18n.customer_firstName}:"/>
+                    <h:inputText id="firstName" value="#{shoppingCartBean.customer.firstName}" readonly="true" class="form-control"/>
+                    <h:message for="firstName" style="color: red;"/>
+
+                    <h:outputText value="#{i18n.customer_lastName}:"/>
+                    <h:inputText id="lastName" value="#{shoppingCartBean.customer.lastName}" readonly="true" class="form-control"/>
+                    <h:message for="lastName" style="color: red;"/>
+
+                    <h:outputText value="#{i18n.customer_email}:"/>
+                    <h:inputText id="email" value="#{shoppingCartBean.customer.email}" readonly="true" class="form-control"/>
+                    <h:message for="email" style="color: red;"/>
+
+                </h:panelGrid>
+            </div>
+            </div>
+
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">#{i18n.confirmorder_deliveryAddress}</h3>
+            </div>
+            <div class="panel-body">
+                <h:panelGrid columns="3">
+                    <h:outputText value="* #{i18n.address_street1}:"/>
+                    <h:inputText id="street1" value="#{shoppingCartBean.customer.homeAddress.street1}" class="form-control"/>
+                    <h:message for="street1" style="color: red;"/>
+
+                    <h:outputText value="#{i18n.address_street2}:"/>
+                    <h:inputText id="street2" value="#{shoppingCartBean.customer.homeAddress.street2}" class="form-control"/>
+                    <h:message for="street2" style="color: red;"/>
+
+                    <h:outputText value="* #{i18n.address_city}:"/>
+                    <h:inputText id="city" value="#{shoppingCartBean.customer.homeAddress.city}" class="form-control"/>
+                    <h:message for="city" style="color: red;"/>
+
+                    <h:outputText value="#{i18n.address_state}:"/>
+                    <h:inputText id="state" value="#{shoppingCartBean.customer.homeAddress.state}" class="form-control"/>
+                    <h:message for="state" style="color: red;"/>
+
+                    <h:outputText value="* #{i18n.address_zipcode}:"/>
+                    <h:inputText id="zipcode" value="#{shoppingCartBean.customer.homeAddress.zipcode}" class="form-control"/>
+                    <h:message for="zipcode" style="color: red;"/>
+
+                    <h:outputText value="* #{i18n.address_country}:"/>
+                    <h:selectOneMenu id="country"  converter="#{countryBean.converter}" value="#{shoppingCartBean.customer.homeAddress.country}" class="form-control">
+                        <f:selectItem/>
+                        <f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}" value="#{countryBean.all}" var="_item"/>
+                    </h:selectOneMenu>
+                    <h:message for="country" style="color: red;"/>
+
+                </h:panelGrid>
+            </div>
+            </div>
+
+            <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">#{i18n.creditCard}</h3>
+            </div>
+            <div class="panel-body">
+                <h:panelGrid columns="3">
+                    <h:outputText value="* #{i18n.creditCard_creditCardNumber}:"/>
+                    <h:inputText id="creditCardNumber" value="#{shoppingCartBean.creditCard.creditCardNumber}" class="form-control"/>
+                    <h:message for="creditCardNumber" style="color: red;"/>
+
+                    <h:outputText value="* #{i18n.creditCard_creditCardType}:"/>
+                    <h:selectOneMenu value="#{shoppingCartBean.creditCard.creditCardType}" class="form-control">
+                        <f:selectItems value="#{shoppingCartBean.creditCardTypes}"/>
+                    </h:selectOneMenu>
+                    <h:outputText value=""/>
+
+                    <h:outputText value="* #{i18n.creditCard_creditCardExpDate} (MM/YY):"/>
+                    <h:inputText id="creditCardExpDate" value="#{shoppingCartBean.creditCard.creditCardExpDate}"  class="form-control"/>
+                    <h:message for="creditCardExpDate" style="color: red;"/>
+                </h:panelGrid>
+            </div>
+            </div>
+
+            <div>
+                <h:commandButton value="#{i18n.submit}" action="#{shoppingCartBean.confirmOrder}" type="submit"
+                                 class="btn btn-primary"/>
+            </div>
+        </h:form>
+
+    </ui:define>
+</ui:composition>
