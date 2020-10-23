@@ -16,7 +16,7 @@
     "NSGName": "[toLower( concat( 'nsg1-', substring( uniquestring(resourceGroup().id), 0, 5 ) ) )]",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]",
     "subnetID": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
-    "vmName": "linVM",
+    "vmName": "linuxVM-arm",
     "vmSize": "Standard_B2s",
     "adminUsername": "cloud_user",
     "adminPassword": "LA_ACG_Together2020!!",
