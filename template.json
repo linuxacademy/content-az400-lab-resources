@@ -135,7 +135,7 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
-            ],
+            ],,
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[variables('vmSize')]"
