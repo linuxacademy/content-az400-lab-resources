@@ -5,10 +5,10 @@
   },
   "variables": {
     "osDiskType": "Standard_LRS",
-    "subnetPrefix": "10.1.0.0/24",
-    "vnetPrefix": "10.1.0.0/16",
-    "location": "westus",
-    "vnetName": "lab-VNet1",
+    "subnetPrefix": "10.2.0.0/24",
+    "vnetPrefix": "10.2.0.0/16",
+    "location": "[resourceGroup().location]",
+    "vnetName": "VNet-arm",
     "subnetName": "default",
     "nicName": "[toLower( concat( 'nic2-', substring( uniquestring(resourceGroup().id), 0, 5 ) ) )]",
     "publicIPAddressName": "[toLower( concat( 'pip-lin-', substring( uniquestring(resourceGroup().id), 0, 5 ) ) )]",
@@ -72,39 +72,41 @@
       "properties": {
         "securityRules": [
           {
-            "name": "http",
+            "name": "ssh",
             "properties": {
-              "priority": 100,
-              "protocol": "TCP",
+              "priority": 1000,
               "access": "Allow",
               "direction": "Inbound",
-              "sourcevnetPrefix": "*",
+              "destinationPortRange": "22",
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
               "sourcePortRange": "*",
-              "destinationvnetPrefix": "*",
-              "destinationPortRange": "80"
+              "destinationAddressPrefix": "*"
             }
           }
         ]
       }
     },
     {
+      "apiVersion": "2020-05-01",
       "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2020-06-01",
       "name": "[variables('vnetName')]",
       "location": "[variables('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSGName'))]"
+      ],
       "properties": {
         "addressSpace": {
-          "vnetPrefixes": [
-            "[variables('vnetPrefix')]"
-          ]
+          "addressPrefixes": ["[variables('vnetPrefix')]"]
         },
         "subnets": [
           {
             "name": "[variables('subnetName')]",
             "properties": {
-              "vnetPrefix": "[variables('subnetPrefix')]",
-              "privateEndpointNetworkPolicies": "Enabled",
-              "privateLinkServiceNetworkPolicies": "Enabled"
+              "addressPrefix": "[variables('subnetPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('NSGName'))]"
+              }
             }
           }
         ]
@@ -127,7 +129,7 @@
         },
         "idleTimeoutInMinutes": 4
       }
-    },
+    },,
     {
             "name": "[variables('vmName')]",
             "type": "Microsoft.Compute/virtualMachines",
@@ -135,7 +137,7 @@
             "location": "[variables('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
-            ],,
+            ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[variables('vmSize')]"
