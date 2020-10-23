@@ -2,29 +2,6 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "adminUsername": {
-      "type": "string",
-      "metadata": {
-        "description": "Username for the Virtual Machine."
-      }
-    },
-    "authenticationType": {
-      "type": "string",
-      "defaultValue": "password",
-      "allowedValues": [
-        "sshPublicKey",
-        "password"
-      ],
-      "metadata": {
-        "description": "Type of authentication to use."
-      }
-    },
-    "adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for the Virtual Machine."
-      }
-    }
   },
   "variables": {
     "osDiskType": "Standard_LRS",
@@ -41,21 +18,9 @@
     "subnetID": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
     "vmName": "linVM",
     "vmSize": "Standard_B2s",
-    "imagePublisher": "Canonical",
-    "imageOffer": "UbuntuServer",
-    "osVersion": "18.04-LTS",
-    "storageAccountName": "[toLower( concat( 'stor', uniqueString(resourceGroup().id)))]",
-    "linuxConfiguration": {
-      "disablePasswordAuthentication": true,
-      "ssh": {
-        "publicKeys": [
-          {
-            "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-            "keyData": "[parameters('adminPassword')]"
-          }
-        ]
-      }
-    }
+    "adminUsername": "cloud_user",
+    "adminPassword": "LA_ACG_Together2020!!",
+    "storageAccountName": "[toLower( concat( 'stor', uniqueString(resourceGroup().id)))]"
   },
   "resources": [
     {
@@ -164,51 +129,50 @@
       }
     },
     {
-      "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2020-06-01",
-      "name": "[variables('vmName')]",
-      "location": "[variables('location')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
-      ],
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "[variables('vmSize')]"
-        },
-        "storageProfile": {
-          "osDisk": {
-            "createOption": "fromImage",
-            "managedDisk": {
-              "storageAccountType": "[variables('osDiskType')]"
+            "name": "[variables('vmName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2020-06-01",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[variables('vmSize')]"
+                },
+                "storageProfile": {
+                    "osDisk": {
+                        "createOption": "fromImage",
+                        "managedDisk": {
+                            "storageAccountType": "[variables('osDiskType')]"
+                        }
+                    },
+                    "imageReference": {
+                        "publisher": "Canonical",
+                        "offer": "UbuntuServer",
+                        "sku": "18.04-LTS",
+                        "version": "latest"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+                        }
+                    ]
+                },
+                "osProfile": {
+                    "computerName": "[variables('vmName')]",
+                    "adminUsername": "[variables('adminUsername')]",
+                    "adminPassword": "[variables('adminPassword')]"
+                }
             }
-          },
-          "imageReference": {
-            "publisher": "[variables('imagePublisher')]",
-            "offer": "[variables('imageOffer')]",
-            "sku": "[variables('osVersion')]",
-            "version": "latest"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
-            }
-          ]
-        },,
-        "osProfile": {
-          "computerName": "[variables('vmName')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]",
-          "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
         }
-      }
-    }
   ],
   "outputs": {
     "adminUsername": {
       "type": "string",
-      "value": "[parameters('adminUsername')]"
+      "value": "[variables('adminUsername')]"
     },
     "hostname": {
       "type": "string",
@@ -216,7 +180,7 @@
     },
     "sshCommand": {
       "type": "string",
-      "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
+      "value": "[concat('ssh ', variables('adminUsername'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
     }
   }
 }
