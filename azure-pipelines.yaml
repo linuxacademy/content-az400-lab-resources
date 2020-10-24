@@ -1,15 +1,16 @@
 trigger:
   branches:
     include: 
-    - master
+    - docker
+
 variables:
   buildConfiguration: 'Release'
   location: 'eastus'
-  acrHostName: 'container-registry-host-name'
-  acrName: 'container-registry-name'
-  rgName: 'resource-group-name'
-  imageName: 'imagename'
-  webAppName: 'webapp-name'
+  acrHostName: 'acgacr10232020.azurecr.io'
+  acrName: 'acgacr10232020'
+  rgName: '466-dbb580bb-create-a-ci-cd-pipeline-for-azure-web'
+  imageName: 'acgdocker1'
+  webAppName: 'acgwebapp102320201'
 
 stages:
 
