@@ -46,7 +46,7 @@ stages:
         location: 'East US'
         templateLocation: 'URL of the file'
         csmFileLink: 'https://raw.githubusercontent.com/linuxacademy/content-az400-lab-resources/docker/ArmTemplates/container-webapp-template.json'
-        overrideParameters: '-registryName $(imageName)'
+        overrideParameters: '-registryName $(imageName) -webAppName $(webAppName)'
         
     - task: AzureWebAppContainer@1
       inputs:
