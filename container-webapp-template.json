@@ -4,12 +4,14 @@
     "parameters": {
         "registryName": {
             "type": "String"
+        },
+        "webAppName": {
+            "type": "String"
         }
     },
     "variables": {
         "location": "[resourceGroup().location]",
-        "webAppName": "[concat('webapp',uniquestring(resourceGroup().id))]",
-        "hostingPlanName": "[concat('AppServicePlan-', variables('webAppName'))]",
+        "hostingPlanName": "[concat('Asp-', parameters('webAppName'))]",
         "dockerRegistryUrl": "https://index.docker.io",
         "dockerRegistryStartupCommand": "",
         "alwaysOn": false,
@@ -24,7 +26,7 @@
     "resources": [
     {
             "apiVersion": "2018-11-01",
-            "name": "[variables('webAppName')]",
+            "name": "[parameters('webAppName')]",
             "type": "Microsoft.Web/sites",
             "location": "[variables('location')]",
             "tags": {},
@@ -32,7 +34,7 @@
                 "[concat('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
             ],
             "properties": {
-                "name": "[variables('webAppName')]",
+                "name": "[parameters('webAppName')]",
                 "siteConfig": {
                     "appSettings": [
                         {
