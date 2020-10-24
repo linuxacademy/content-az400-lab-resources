@@ -2,7 +2,6 @@ trigger:
 - docker
 
 variables:
-  buildConfiguration: 'Release'
   location: 'eastus'
   rgName: '466-bfaaaffa-create-a-ci-cd-pipeline-for-azure-web'
   imageName: 'chadmcrowell/javascript-docker'
