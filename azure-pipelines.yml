@@ -27,7 +27,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: 'Docker'
-        repository: 'chadmcrowell/javascript-docker'
+        repository: '$(imageName)'
         command: 'push'
 
 - stage: Deploy
