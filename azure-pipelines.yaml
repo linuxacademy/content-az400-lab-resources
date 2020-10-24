@@ -4,12 +4,12 @@ trigger:
     - master
 variables:
   buildConfiguration: 'Release'
-  location: 'West US 2'
-  acrHostName: 'cswebappdocker004acr.azurecr.io'
-  acrName: 'cswebappdocker004acr'
-  rgName: 'cswebappdocker004-rg'
-  imageName: 'cswebappdocker004'
-  webAppName: 'cswebappdocker004'
+  location: 'eastus'
+  acrHostName: 'container-registry-host-name'
+  acrName: 'container-registry-name'
+  rgName: 'resource-group-name'
+  imageName: 'imagename'
+  webAppName: 'webapp-name'
 
 stages:
 
