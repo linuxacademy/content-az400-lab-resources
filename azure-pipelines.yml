@@ -4,7 +4,6 @@ trigger:
 variables:
   buildConfiguration: 'Release'
   location: 'eastus'
-  registryName: 'https://index.docker.io'
   rgName: '466-bfaaaffa-create-a-ci-cd-pipeline-for-azure-web'
   imageName: 'chadmcrowell/javascript-docker'
   webAppName: 'acgwebapp'
@@ -47,7 +46,7 @@ stages:
         location: 'East US'
         templateLocation: 'URL of the file'
         csmFileLink: 'https://raw.githubusercontent.com/linuxacademy/content-az400-lab-resources/docker/ArmTemplates/container-webapp-template.json'
-        overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName) -appInsightsLocation "$(location)" -sku "S1 Standard" -registryName $(registryName) -registryLocation "$(location)" -registrySku standard -imageName $(imageName):$(Build.BuildId)'
+        overrideParameters: '-registryName $(imageName)'
         
     - task: AzureWebAppContainer@1
       inputs:
