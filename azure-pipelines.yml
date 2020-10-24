@@ -1,0 +1,57 @@
+trigger:
+- main
+
+variables:
+  buildConfiguration: 'Release'
+  location: 'eastus'
+  acrHostName: 'accr10232020.azurecr.io'
+  acrName: 'accr10232020'
+  rgName: '466-bfaaaffa-create-a-ci-cd-pipeline-for-azure-web'
+  imageName: 'chadmcrowell/javascript-docker'
+  webAppName: 'acgppp102320201'
+
+stages:
+
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        repository: $(imageName)
+        command: build
+        Dockerfile: app/Dockerfile
+      
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Docker'
+        repository: 'chadmcrowell/javascript-docker'
+        command: 'push'
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    steps:
+    - checkout: none
+
+    - task: AzureResourceGroupDeployment@2
+      displayName: 'Azure Deployment:Create Azure App Service'
+      inputs:
+        azureSubscription: 'AzureSC'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '466-bfaaaffa-create-a-ci-cd-pipeline-for-azure-web'
+        location: 'East US'
+        templateLocation: 'URL of the file'
+        csmFileLink: 'https://raw.githubusercontent.com/linuxacademy/content-az400-lab-resources/docker/ArmTemplates/container-webapp-template.json'
+        overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName) -appInsightsLocation "$(location)" -sku "S1 Standard" -registryName $(acrName) -registryLocation "$(location)" -registrySku standard -imageName $(imageName):$(Build.BuildId)'
+        
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'AzureSC'
+        appName: '$(webAppName)'
+        containers: '$(imageName):$(Build.BuildId)'
