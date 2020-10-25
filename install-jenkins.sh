@@ -8,3 +8,10 @@ sudo apt-get install -y jenkins
 sudo apt install -y openjdk-8-jdk
 sudo touch /var/lib/jenkins/jenkins.install.InstallUtil.lastExecVersion
 sudo systemctl restart jenkins
+
+# nodejs and npm
+sudo apt install nodejs
+sudo apt install npm
+
+# zip
+sudo apt install -y zip
