@@ -1,54 +1,69 @@
 trigger:
-- docker
+- master
 
 variables:
-  location: 'eastus'
-  rgName: '466-bfaaaffa-create-a-ci-cd-pipeline-for-azure-web'
-  imageName: 'chadmcrowell/javascript-docker'
-  webAppName: 'acgwebapp'
+  dockerRegistryServiceConnection: 'ACR'
+  imageRepository: 'azure-vote-front'
+  containerRegistry: 'anmereugo33.azurecr.io'
+  dockerfilePath: '**/Dockerfile'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'csacr5d93-auth'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+  
 
 stages:
 
 - stage: Build
-  jobs:
+  displayName: Build stage
+  jobs:  
   - job: Build
+    displayName: Build
     pool:
-      vmImage: 'Ubuntu-16.04'
+      vmImage: $(vmImageName)
     steps:
     - task: Docker@2
-      displayName: Build an image
+      displayName: Build and push an image to container registry
       inputs:
-        repository: $(imageName)
-        command: build
-        Dockerfile: app/Dockerfile
-      
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'Docker'
-        repository: '$(imageName)'
-        command: 'push'
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+          
+    - upload: manifests
+      artifact: manifests
 
-- stage: Deploy
+- stage: Development
+  displayName: Deploy to dev
+  dependsOn: Build
+
   jobs:
-  - job: Deploy
+  - deployment: Deploy
+    displayName: Deploy to dev
     pool:
-      vmImage: 'Ubuntu-16.04'
-    steps:
-    - checkout: none
-
-    - task: AzureResourceGroupDeployment@2
-      displayName: 'Azure Deployment:Create Azure App Service'
-      inputs:
-        azureSubscription: 'AzureSC'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: '$(rgName)'
-        location: 'East US'
-        templateLocation: 'URL of the file'
-        csmFileLink: 'https://raw.githubusercontent.com/linuxacademy/content-az400-lab-resources/docker/ArmTemplates/container-webapp-template.json'
-        overrideParameters: '-registryName $(imageName) -webAppName $(webAppName)'
-        
-    - task: AzureWebAppContainer@1
-      inputs:
-        azureSubscription: 'AzureSC'
-        appName: '$(webAppName)'
-        containers: '$(imageName):$(Build.BuildId)'
+      vmImage: $(vmImageName)
+    environment: 'dev.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+              
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/vote.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)
