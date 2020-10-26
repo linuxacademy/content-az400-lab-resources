@@ -7,6 +7,8 @@ sudo apt install -y zip
 sudo apt install -y nodejs
 sudo apt install -y npm
 
+sleep 60
+
 # Jenkins
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
