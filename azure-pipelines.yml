@@ -1,6 +1,3 @@
-trigger:
-- actions
-
 variables:
   buildConfiguration: 'Release'
   webappName: 'webapp308844lsj'
