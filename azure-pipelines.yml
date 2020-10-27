@@ -1,0 +1,56 @@
+trigger:
+- actions
+
+variables:
+  buildConfiguration: 'Release'
+  webappName: 'webapp308844lsj'
+
+stages:
+
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        feedsToUse: 'select'
+    
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+    
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
+    
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+    
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - checkout: none
+    
+    - download: current
+      artifact: drop
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'SP'
+        appType: 'webAppLinux'
+        appName: '$(webappName)'
+        package: '$(Pipeline.Workspace)/**/*.zip'
