@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row">
+    Upload picture:
+    <form asp-controller="ImageIDAPI" asp-action="UploadFoodImage" method="post" enctype="multipart/form-data">
+        <input type="file" name="files" />
+        <br />
+        <input name="button" type="submit" value="Add" />
+    </form>
+</div>

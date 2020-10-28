@@ -1,0 +1,60 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata: 
+  name: techreadydemo-dev
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: techreadydemo-dev
+    spec:
+      containers:
+      - name: techreadydemo-dev
+        image: abelcontainerregistry.azurecr.io/techreadydemo:latest
+        env:
+        - name: Local
+          value: "false"
+        - name: ASPNETCORE_URLS
+          value: "http://+:80"        
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+        - name: azurecontainerreg
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: techreadydemo-dev
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: techreadydemo-dev
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: techreadydemo-dev-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: dev.tr.aks.az.jessicadeen.com
+      http:
+        paths:
+          - backend:
+              serviceName: techreadydemo-dev
+              servicePort: 80
+  tls:
+    - secretName: dev.tr.aks.az.jessicadeen.com
+      hosts:
+      - dev.tr.aks.az.jessicadeen.com
