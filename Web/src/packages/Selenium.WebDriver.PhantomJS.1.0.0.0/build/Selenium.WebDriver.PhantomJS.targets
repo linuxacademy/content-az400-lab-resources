@@ -1,9 +1,0 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  
-  <Target Name="CopyPhantomJsToBin" BeforeTargets="AfterBuild">
-    <PropertyGroup>
-      <PhantomJsSrcPath>$(MSBuildThisFileDirectory)..\driver\phantomjs.exe</PhantomJsSrcPath>
-      <PhantomJsTargetPath Condition=" '$(PhantomJsTargetPath)' == '' ">$(TargetDir)</PhantomJsTargetPath>
-    </PropertyGroup>
-    <Copy SourceFiles="$(PhantomJsSrcPath)" DestinationFiles="$(PhantomJsTargetPath)phantomjs.exe" SkipUnchangedFiles="true"></Copy>
-  </Target>
-</Project>

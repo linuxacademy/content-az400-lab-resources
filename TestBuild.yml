@@ -1,5 +1,0 @@
-queue: Hosted VS2017
-
-steps:
-# some change
-- script: echo hello world $(Build.BinariesDirectory)
