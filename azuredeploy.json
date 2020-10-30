@@ -2,7 +2,21 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "administratorLoginPassword": {
+        "webAppName": {
+        "type": "string",
+        "defaultValue": "webappacg2080833",
+        "metadata": {
+          "description": "The name of the web app that you wish to create."
+        }
+      },
+      "mySQLAdminLoginName": {
+        "type": "string",
+        "defaultValue": "azureuser",
+        "metadata": {
+          "description": "Admin login name cannot be 'azure_superuser', 'admin', 'administrator', 'root', 'guest' or 'public'."
+        }
+      },
+        "mySQLAdminLoginPassword": {
             "type": "securestring",
             "minLength": 8,
             "maxLength": 128,
@@ -12,18 +26,16 @@
         }
     },
     "variables": {
-        "databaseName": "[concat(variables('webAppName'), 'database')]",
-        "serverName": "[concat(variables('webAppName'), 'myserver')]",
-        "hostingPlanName": "[concat(variables('webAppName'), 'serviceplan')]",
+        "databaseName": "[concat(parameters('webAppName'), 'database')]",
+        "serverName": "[concat(parameters('webAppName'), 'myserver')]",
+        "hostingPlanName": "[concat(parameters('webAppName'), 'serviceplan')]",
         "databaseSkuFamily": "Gen5",
         "location": "[resourceGroup().location]",
         "mysqlVersion": "5.7",
         "databaseSkuTier": "GeneralPurpose",
         "databaseSkuSizeMB": 51200,
         "databaseSkuName": "GP_Gen5_2",
-        "databaseSkucapacity": 2,
-        "mySQLAdminLoginName": "dbadmin",
-        "webAppName": "[concat('webapp',uniquestring(resourceGroup().id))]"
+        "databaseSkucapacity": 2
     },
     "resources": [
         {
@@ -44,14 +56,14 @@
         },
         {
             "apiVersion": "2020-06-01",
-            "name": "[variables('webAppName')]",
+            "name": "[parameters('webAppName')]",
             "type": "Microsoft.Web/sites",
             "location": "[variables('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
             ],
             "properties": {
-                "name": "[variables('webAppName')]",
+                "name": "[parameters('webAppName')]",
                 "serverFarmId": "[variables('hostingPlanName')]"
             },
             "resources": [
@@ -60,11 +72,11 @@
                     "name": "connectionstrings",
                     "type": "config",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Web/sites/', variables('webAppName'))]"
+                        "[resourceId('Microsoft.Web/sites/', parameters('webAppName'))]"
                     ],
                     "properties": {
                         "defaultConnection": {
-                            "value": "[concat('Database=', variables('databaseName'), ';Data Source=', reference(resourceId('Microsoft.DBforMySQL/servers',variables('serverName'))).fullyQualifiedDomainName, ';User Id=', variables('mySQLAdminLoginName'),'@', variables('serverName'),';Password=', parameters('administratorLoginPassword'))]",
+                            "value": "[concat('Database=', variables('databaseName'), ';Data Source=', reference(resourceId('Microsoft.DBforMySQL/servers',variables('serverName'))).fullyQualifiedDomainName, ';User Id=', parameters('mySQLAdminLoginName'),'@', variables('serverName'),';Password=', parameters('mySQLAdminLoginPassword'))]",
                             "type": "MySql"
                         }
                     }
@@ -86,8 +98,8 @@
             "properties": {
                 "createMode": "Default",
                 "version": "[variables('mysqlVersion')]",
-                "administratorLogin": "[variables('mySQLAdminLoginName')]",
-                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "administratorLogin": "[parameters('mySQLAdminLoginName')]",
+                "administratorLoginPassword": "[parameters('mySQLAdminLoginPassword')]",
                 "storageProfile": {
                     "storageMB": "[variables('databaseSkuSizeMB')]",
                     "backupRetentionDays": 7,
