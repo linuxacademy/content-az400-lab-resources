@@ -42,12 +42,9 @@
     },
     "windowsOSVersion": {
       "type": "string",
-      "defaultValue": "2016-Datacenter-smalldisk",
+      "defaultValue": "2019-Datacenter-smalldisk",
       "allowedValues": [
-        "2012-R2-Datacenter",
-        "2016-Datacenter",
-        "2012-R2-Datacenter-smalldisk",
-        "2016-Datacenter-smalldisk"
+        "2019-Datacenter-smalldisk"
       ],
       "metadata": {
         "description": "The Windows version for the VM."
